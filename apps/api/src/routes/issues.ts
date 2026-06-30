@@ -24,7 +24,12 @@ export const issueRoutes: FastifyPluginAsyncZod = async (fastify) => {
       })
     }
   }, async (req) => {
-    const issue = await prisma.issue.create({ data: req.body });
+    const data = {
+      ...req.body,
+      category: req.body.category as IssueCategory,
+      severity: req.body.severity as IssueSeverity | undefined
+    };
+    const issue = await prisma.issue.create({ data });
     return { success: true, data: issue };
   });
 };

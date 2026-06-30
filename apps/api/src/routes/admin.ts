@@ -35,7 +35,7 @@ export const adminRoutes: FastifyPluginAsyncZod = async (fastify) => {
     schema: { querystring: z.object({ status: z.string().optional() }) }
   }, async (req) => {
     const issues = await prisma.issue.findMany({
-      where: req.query.status ? { status: req.query.status } : {},
+      where: req.query.status ? { status: req.query.status as any } : {},
       orderBy: { createdAt: 'desc' },
       take: 50
     });

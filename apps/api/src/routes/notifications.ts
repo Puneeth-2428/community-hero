@@ -31,10 +31,10 @@ export const notificationsRoutes: FastifyPluginAsyncZod = async (fastify) => {
     const { userId, type, inApp, email, push } = req.body;
     const pref = await prisma.notificationPreference.upsert({
       where: {
-        userId_type: { userId, type }
+        userId_type: { userId, type: type as any }
       },
       update: { inApp, email, push },
-      create: { userId, type, inApp, email, push }
+      create: { userId, type: type as any, inApp, email, push }
     });
     return { success: true, data: pref };
   });
