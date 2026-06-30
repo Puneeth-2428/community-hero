@@ -3,7 +3,7 @@ import { z } from 'zod';
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   API_HOST: z.string().default('0.0.0.0'),
-  API_PORT: z.coerce.number().default(4000),
+  API_PORT: z.coerce.number().default(process.env.PORT ? parseInt(process.env.PORT, 10) : 4000),
 
   // Security
   JWT_SECRET: z.string().default('super-secret-jwt-key-change-in-prod'),
