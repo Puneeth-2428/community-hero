@@ -1,0 +1,124 @@
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: ap-south-1
+  ECR_REPOSITORY_API: community-hero-api
+  ECR_REPOSITORY_WEB: community-hero-web
+  ECS_CLUSTER: community-hero-cluster
+  ECS_SERVICE_API: community-hero-api-service
+  ECS_SERVICE_WEB: community-hero-web-service
+
+jobs:
+  lint_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Prisma Generate
+      run: pnpm --filter @community-hero/api db:generate
+
+    - name: Lint
+      run: pnpm lint --if-present
+
+    - name: Type Check
+      run: pnpm tsc --noEmit
+
+    # - name: Run tests (Placeholder)
+    #   run: pnpm test
+
+  build_and_deploy:
+    needs: lint_and_test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push API image to Amazon ECR
+      id: build-api
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG -f apps/api/Dockerfile .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Build, tag, and push WEB image to Amazon ECR
+      id: build-web
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG -f apps/web/Dockerfile .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    # Deploy API
+    - name: Download task definition API
+      run: |
+        aws ecs describe-task-definition --task-definition community-hero-api --query taskDefinition > task-def-api.json
+
+    - name: Fill in the new image ID in the Amazon ECS API task definition
+      id: task-def-api
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-def-api.json
+        container-name: api
+        image: ${{ steps.build-api.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition API
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-api.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_API }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
+
+    # Deploy WEB
+    - name: Download task definition WEB
+      run: |
+        aws ecs describe-task-definition --task-definition community-hero-web --query taskDefinition > task-def-web.json
+
+    - name: Fill in the new image ID in the Amazon ECS WEB task definition
+      id: task-def-web
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-def-web.json
+        container-name: web
+        image: ${{ steps.build-web.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition WEB
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-web.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE_WEB }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true

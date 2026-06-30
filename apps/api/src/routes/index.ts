@@ -1,0 +1,11 @@
+export { healthRoutes } from './health.js';
+export { issueRoutes } from './issues.js';
+export { votesRoutes } from './votes.js';
+export { commentsRoutes } from './comments.js';
+export { notificationsRoutes } from './notifications.js';
+export { dashboardRoutes } from './dashboard.js';
+export { adminRoutes } from './admin.js';
+export { profileRoutes } from './profile.js';
+export { leaderboardRoutes } from './leaderboard.js';
+export { challengesRoutes } from './challenges.js';
+export { authRoutes } from './auth.js';

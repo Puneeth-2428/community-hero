@@ -1,0 +1,41 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "ward_name": "Downtown"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.2000, 28.6000],
+            [77.2500, 28.6000],
+            [77.2500, 28.6500],
+            [77.2000, 28.6500],
+            [77.2000, 28.6000]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "ward_name": "Northside"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.2000, 28.6500],
+            [77.2500, 28.6500],
+            [77.2500, 28.7000],
+            [77.2000, 28.7000],
+            [77.2000, 28.6500]
+          ]
+        ]
+      }
+    }
+  ]
+}
