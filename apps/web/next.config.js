@@ -14,6 +14,7 @@ const nextConfig = {
     ],
   },
   experimental: {
+    outputFileTracingRoot: require('path').join(__dirname, '../../'),
     serverActions: {
       bodySizeLimit: '10mb',
     },
