@@ -20,7 +20,7 @@ export class GamificationService {
 
       // Fallbacks if not seeded
       if (!config) {
-        const fallbacks: Record<KarmaActionType, number> = {
+        const fallbacks: Partial<Record<KarmaActionType, number>> = {
           REPORT_ISSUE: 10,
           ISSUE_VERIFIED: 20,
           ISSUE_RESOLVED: 50,
