@@ -1,6 +1,7 @@
 FROM node:20-alpine AS builder
 
-# Setup pnpm
+# Setup pnpm and openssl for Prisma
+RUN apk add --no-cache openssl
 RUN npm install -g pnpm
 WORKDIR /app
 
@@ -24,6 +25,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Setup pnpm for production run if needed, though npm start is fine
+RUN apk add --no-cache openssl
 RUN npm install -g pnpm
 
 # Copy built artifacts and node_modules
