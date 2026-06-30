@@ -17,17 +17,73 @@ datasource db {
 //  ENUMS
 // ═══════════════════════════════════════════════
 
+enum Role {
+  CITIZEN
+  MODERATOR
+  ADMIN
+}
 
+enum IssueCategory {
+  POTHOLE
+  ROAD_DAMAGE
+  STREETLIGHT
+  TRAFFIC_SIGNAL
+  GARBAGE
+  ILLEGAL_DUMPING
+  SEWAGE
+  WATER_SUPPLY
+  PARK_MAINTENANCE
+  PUBLIC_SAFETY
+  NOISE_COMPLAINT
+}
 
+enum IssueSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
 
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+  REJECTED
+}
 
+enum MediaType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
 
+enum VoteType {
+  UPVOTE
+  VERIFY
+  DISPUTE
+}
 
+enum NotificationType {
+  ISSUE_STATUS_CHANGED
+  NEW_COMMENT
+  BADGE_EARNED
+  KARMA_EARNED
+  SYSTEM_ALERT
+}
 
+enum ChallengeTargetType {
+  REPORT_ISSUES
+  VERIFY_ISSUES
+  EARN_KARMA
+}
 
-
-
-
+enum KarmaActionType {
+  REPORT_ISSUE
+  VERIFY_ISSUE
+  RESOLVED_ISSUE
+  DAILY_LOGIN
+}
 
 
 
@@ -91,7 +147,7 @@ model User {
   email         String?   @unique
   password      String?
   avatarUrl     String?
-  role          String @default("CITIZEN")
+  role          Role      @default(CITIZEN)
   karma         Int       @default(0)
   city          String?   
   ward          String?   
@@ -123,9 +179,9 @@ model Issue {
   id          String        @id @default(cuid())
   title       String        
   description String        
-  category String
-  status String @default("OPEN")
-  severity    String @default("MEDIUM")
+  category    IssueCategory
+  status      IssueStatus   @default(OPEN)
+  severity    IssueSeverity @default(MEDIUM)
 
   // ── Location ──
   latitude  Float
@@ -174,7 +230,7 @@ model IssueMedia {
   id       String    @id @default(cuid())
   issueId  String
   url      String
-  type String
+  type     MediaType
   aiLabels String @default("[]") // AI-generated labels for the media
 
   createdAt DateTime @default(now())
@@ -225,7 +281,7 @@ model Vote {
   id      String   @id @default(cuid())
   issueId String
   userId  String
-  type String
+  type    VoteType
 
   createdAt DateTime @default(now())
 
@@ -269,7 +325,7 @@ model UserBadge {
 
 /// Karma point allocation rules.
 model KarmaConfig {
-  actionType String@id
+  actionType KarmaActionType @id
   points     Int
   updatedAt  DateTime        @updatedAt
 
@@ -280,7 +336,7 @@ model KarmaConfig {
 model KarmaHistory {
   id         String          @id @default(cuid())
   userId     String
-  actionType String
+  actionType KarmaActionType
   points Int
   referenceId String?        // e.g. issueId, commentId
 
@@ -297,7 +353,7 @@ model KarmaHistory {
 model Notification {
   id      String           @id @default(cuid())
   userId  String
-  type String
+  type    NotificationType
   payload String // Flexible JSON payload (issueId, message, etc.)
   read    Boolean          @default(false)
 
@@ -314,7 +370,7 @@ model Notification {
 model NotificationPreference {
   id      String           @id @default(cuid())
   userId  String
-  type String
+  type    NotificationType
   inApp   Boolean          @default(true)
   email   Boolean          @default(true)
   push    Boolean          @default(false)
@@ -363,7 +419,7 @@ model Challenge {
   id            String              @id @default(cuid())
   title         String              
   description   String              
-  targetAction String
+  targetAction ChallengeTargetType
   targetCount Int
   rewardKarma   Int
   rewardBadgeId String?             // Optional badge reward
