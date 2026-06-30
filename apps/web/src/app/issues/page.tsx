@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
 
-export const revalidate = 60; // Next.js ISR (60 seconds)
+export const dynamic = 'force-dynamic';
 
 async function getIssues() {
   // Using absolute URL for Server Component fetch
