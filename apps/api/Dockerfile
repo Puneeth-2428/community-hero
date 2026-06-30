@@ -5,7 +5,7 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copy root configurations and workspace definition
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Copy all packages and apps (you could prune this, but doing it simply here)
 COPY apps/api ./apps/api
