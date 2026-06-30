@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  PROJECT_ID: your-google-cloud-project-id # Replace with your project ID
+  PROJECT_ID: community-hero-501014 # Replace with your project ID
   REGION: us-central1
   GAR_LOCATION: us-central1-docker.pkg.dev
   REPOSITORY: community-hero-repo
