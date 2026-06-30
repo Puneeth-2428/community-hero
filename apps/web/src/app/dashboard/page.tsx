@@ -126,7 +126,7 @@ export default function DashboardPage() {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <RechartsTooltip formatter={(value, name) => [value, name.toString().replace('_', ' ')]} />
+                  <RechartsTooltip formatter={(value, name) => [value, String(name).replace('_', ' ')]} />
                   <Legend verticalAlign="middle" align="right" layout="vertical" formatter={(v) => v.replace('_', ' ')} />
                 </PieChart>
               </ResponsiveContainer>

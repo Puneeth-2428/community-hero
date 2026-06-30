@@ -90,8 +90,8 @@ export const CommentItem = ({ comment, onReplySubmit, isReply = false }: Comment
           )}
         </div>
 
-        <div className={`text-sm ${comment.isSystem ? 'text-blue-700 bg-blue-50 p-3 rounded-lg border border-blue-100' : 'text-slate-700'}`}>
-          <ReactMarkdown rehypePlugins={[rehypeSanitize]} className="prose prose-sm max-w-none">
+        <div className={`text-sm prose prose-sm max-w-none ${comment.isSystem ? 'text-blue-700 bg-blue-50 p-3 rounded-lg border border-blue-100' : 'text-slate-700'}`}>
+          <ReactMarkdown rehypePlugins={[rehypeSanitize]}>
             {comment.text}
           </ReactMarkdown>
         </div>
