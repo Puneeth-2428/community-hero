@@ -33,5 +33,5 @@ COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 
 EXPOSE 3000
 
-# Next.js standalone puts the entrypoint in the apps/web/server.js relative to the project root
-CMD ["node", "apps/web/server.js"]
+# Next.js standalone outputs server.js to the root of the .next/standalone folder since we don't use outputFileTracingRoot
+CMD ["node", "server.js"]
