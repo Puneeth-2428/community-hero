@@ -8,7 +8,7 @@ import { useSocket } from '@/hooks/useSocket';
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export const NotificationBadge = ({ userId }: { userId: string }) => {
-  const { data, mutate } = useSWR(`http://localhost:4000/api/v1/notifications?userId=${userId}`, fetcher);
+  const { data, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/notifications?userId=${userId}`, fetcher);
   const { socket } = useSocket();
   const [unreadCount, setUnreadCount] = useState(0);
 

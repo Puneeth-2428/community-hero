@@ -24,7 +24,7 @@ export const SocketProvider = ({
 
   useEffect(() => {
     // In production, use env var NEXT_PUBLIC_API_URL
-    const socketInstance = io('http://localhost:4000', {
+    const socketInstance = io((process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api/v1', '') : 'http://localhost:4000'), {
       withCredentials: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,

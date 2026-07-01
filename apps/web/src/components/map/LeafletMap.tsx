@@ -71,7 +71,7 @@ export default function LeafletMap({
   if (statuses.length) queryParams.set('statuses', statuses.join(','));
   if (severities.length) queryParams.set('severities', severities.join(','));
 
-  const swrKey = `http://localhost:4000/api/v1/issues?${queryParams.toString()}`;
+  const swrKey = `${process.env.NEXT_PUBLIC_API_URL}/issues?${queryParams.toString()}`;
   const { data: issuesData, mutate } = useSWR(swrKey, fetcher);
   const { socket } = useSocket();
 

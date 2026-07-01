@@ -14,7 +14,7 @@ export default function LeaderboardPage() {
   const [scope, setScope] = useState<'ward' | 'city' | 'all_india'>('all_india');
   
   const { data, mutate, isLoading } = useSWR(
-    `http://localhost:4000/api/v1/leaderboard?timeframe=${timeframe}&scope=${scope}&userId=${MOCK_USER_ID}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/leaderboard?timeframe=${timeframe}&scope=${scope}&userId=${MOCK_USER_ID}`,
     fetcher
   );
 

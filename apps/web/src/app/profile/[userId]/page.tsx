@@ -12,7 +12,7 @@ const fetcher = (url: string) => fetch(url).then(res => {
 
 export default function ProfilePage({ params }: { params: { userId: string } }) {
   const { data, isLoading, error } = useSWR(
-    `http://localhost:4000/api/v1/profile/${params.userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/profile/${params.userId}`,
     fetcher
   );
 

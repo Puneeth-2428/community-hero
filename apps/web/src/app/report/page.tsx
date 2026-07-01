@@ -55,7 +55,7 @@ function ReportForm() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:4000/api/v1/issues', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/issues`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -75,7 +75,7 @@ function ReportForm() {
         toast.success('Issue reported successfully!');
         const userId = (session?.user as any)?.id;
         if (userId) {
-          mutate(`http://localhost:4000/api/v1/dashboard/citizen?userId=${userId}`);
+          mutate(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/citizen?userId=${userId}`);
         }
         router.push('/dashboard');
       } else {

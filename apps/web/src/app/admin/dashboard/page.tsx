@@ -41,7 +41,7 @@ export default function AdminDashboardPage() {
             <p className="text-muted-foreground mt-1">Overview of civic health and operations.</p>
           </div>
           <button 
-            onClick={() => window.open(`http://localhost:4000/api/v1/admin/export?userId=${userId}`, '_blank')}
+            onClick={() => window.open(`${process.env.NEXT_PUBLIC_API_URL}/admin/export?userId=${userId}`, '_blank')}
             className="flex items-center gap-2 bg-foreground text-background hover:opacity-90 px-5 py-2.5 rounded-xl font-semibold shadow-sm transition-colors"
           >
             <Download className="w-4 h-4" /> Export CSV
@@ -56,12 +56,12 @@ export default function AdminDashboardPage() {
 
 function AdminDashboardContent({ userId }: { userId: string }) {
   const { data: dashboardData, isLoading: dashLoading } = useSWR(
-    `http://localhost:4000/api/v1/admin/dashboard?userId=${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/dashboard?userId=${userId}`,
     fetcher, { refreshInterval: 60000 }
   );
 
   const { data: insightsData, isLoading: insightsLoading } = useSWR(
-    `http://localhost:4000/api/v1/admin/insights?userId=${userId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/insights?userId=${userId}`,
     fetcher, { revalidateOnFocus: false }
   );
 
@@ -185,7 +185,7 @@ function LiveIssueFeed({ userId }: { userId: string }) {
   const { socket } = useSocket();
   
   const { data, mutate } = useSWR(
-    `http://localhost:4000/api/v1/admin/issues?status=OPEN`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/issues?status=OPEN`,
     fetcher
   );
 
@@ -216,7 +216,7 @@ function LiveIssueFeed({ userId }: { userId: string }) {
     setFeed(prev => prev.filter(issue => issue.id !== id));
     
     try {
-      const res = await fetch(`http://localhost:4000/api/v1/admin/issues/${id}/resolve`, { method: 'PUT' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/issues/${id}/resolve`, { method: 'PUT' });
       if (res.ok) {
         toast.success('Issue marked as resolved!');
         mutate(); // Re-fetch open issues in background

@@ -22,7 +22,7 @@ export function useIssueSockets(issueId: string, initialCounts: any, initialStat
 
   useEffect(() => {
     // Assuming backend runs on 4000
-    const socket: Socket = io('http://localhost:4000', {
+    const socket: Socket = io((process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace('/api/v1', '') : 'http://localhost:4000'), {
       withCredentials: true,
     });
 

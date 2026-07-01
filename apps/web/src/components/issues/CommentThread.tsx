@@ -20,7 +20,7 @@ export const CommentThread = ({ issueId, currentUserId }: CommentThreadProps) =>
   // SWR Infinite fetching
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.data.length) return null; // reached the end
-    return `http://localhost:4000/api/v1/issues/${issueId}/comments?page=${pageIndex + 1}&limit=20`;
+    return `${process.env.NEXT_PUBLIC_API_URL}/issues/${issueId}/comments?page=${pageIndex + 1}&limit=20`;
   };
 
   const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(getKey, fetcher);
@@ -97,7 +97,7 @@ export const CommentThread = ({ issueId, currentUserId }: CommentThreadProps) =>
     setNewText('');
 
     try {
-      const res = await fetch(`http://localhost:4000/api/v1/issues/${issueId}/comments`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/issues/${issueId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: optimisticComment.text, userId: currentUserId }),
@@ -115,7 +115,7 @@ export const CommentThread = ({ issueId, currentUserId }: CommentThreadProps) =>
 
   const handleReplySubmit = async (text: string, parentId: string) => {
     try {
-      await fetch(`http://localhost:4000/api/v1/issues/${issueId}/comments`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/issues/${issueId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, userId: currentUserId, parentId }),

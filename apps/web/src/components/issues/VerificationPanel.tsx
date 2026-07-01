@@ -59,7 +59,7 @@ export const VerificationPanel = ({ issueId, userId, initialCounts, initialStatu
     if (hasVoted[type] || hasVoted['ANY']) return; // Check if already voted
 
     try {
-      const res = await fetch(`http://localhost:4000/api/v1/issues/${issueId}/vote`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/issues/${issueId}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, userId }),

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 async function getIssues() {
   // Using absolute URL for Server Component fetch
-  const res = await fetch(`http://localhost:4000/api/v1/issues?limit=50`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/issues?limit=50`);
   if (!res.ok) throw new Error('Failed to fetch data');
   return res.json();
 }

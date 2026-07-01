@@ -31,7 +31,7 @@ const urlBase64ToUint8Array = (base64String: string) => {
 };
 
 export default function NotificationsSettingsPage() {
-  const { data, mutate } = useSWR(`http://localhost:4000/api/v1/notifications/preferences?userId=${MOCK_USER_ID}`, fetcher);
+  const { data, mutate } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/notifications/preferences?userId=${MOCK_USER_ID}`, fetcher);
   const [preferences, setPreferences] = useState<Record<string, any>>({});
   const [isPushEnabled, setIsPushEnabled] = useState(false);
 
@@ -66,7 +66,7 @@ export default function NotificationsSettingsPage() {
     }));
 
     try {
-      await fetch('http://localhost:4000/api/v1/notifications/preferences', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/preferences`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -108,7 +108,7 @@ export default function NotificationsSettingsPage() {
       });
 
       // Save to backend
-      await fetch('http://localhost:4000/api/v1/notifications/push', {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/notifications/push`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

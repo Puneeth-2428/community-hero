@@ -20,13 +20,13 @@ export default function DashboardPage() {
   const userId = (session?.user as any)?.id;
 
   const { data, error, isLoading } = useSWR(
-    userId ? `http://localhost:4000/api/v1/dashboard/citizen?userId=${userId}` : null, 
+    userId ? `${process.env.NEXT_PUBLIC_API_URL}/dashboard/citizen?userId=${userId}` : null, 
     fetcher, 
     { keepPreviousData: true } 
   );
 
   const { data: challengesData } = useSWR(
-    userId ? `http://localhost:4000/api/v1/challenges?userId=${userId}` : null,
+    userId ? `${process.env.NEXT_PUBLIC_API_URL}/challenges?userId=${userId}` : null,
     fetcher
   );
 

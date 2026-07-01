@@ -14,7 +14,7 @@ const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) return null;
 
         try {
-          const res = await fetch('http://127.0.0.1:4000/api/v1/auth/login', {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
             method: 'POST',
             body: JSON.stringify({ email: credentials.email, password: credentials.password }),
             headers: { 'Content-Type': 'application/json' }

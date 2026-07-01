@@ -30,7 +30,7 @@ export default function MapPage() {
   const [showHeatmap, setShowHeatmap] = useState(false);
 
   const { data: issueDetails } = useSWR(
-    selectedIssueId ? `http://localhost:4000/api/v1/issues/${selectedIssueId}` : null,
+    selectedIssueId ? `${process.env.NEXT_PUBLIC_API_URL}/issues/${selectedIssueId}` : null,
     fetcher
   );
 
