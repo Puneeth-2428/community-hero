@@ -1,4 +1,4 @@
-iimport { z } from 'zod';
+import { z } from 'zod';
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -13,7 +13,7 @@ const envSchema = z.object({
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
   TWILIO_VERIFY_SERVICE_SID: z.string().optional(),
-  API_CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  API_CORS_ORIGIN: z.string().default(process.env.CORS_ORIGIN || '*'),
 
   // Database
   DATABASE_URL: z.string().url().default('postgresql://community_hero:changeme_pg_password@localhost:5432/community_hero?schema=public'),
